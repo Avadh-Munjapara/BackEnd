@@ -3,12 +3,12 @@ const schema=mongoose.Schema;
 const toDoSchema=new schema(
     {
         title:{
-            type:string,
+            type:String,
             required:true,
             maxLength:50
         },
         description:{
-            type:string,
+            type:String,
             required:true,
             maxLength:50
         },
