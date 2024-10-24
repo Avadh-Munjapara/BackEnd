@@ -1,7 +1,7 @@
 const express=require('express');
 const app=express();
 const dbConnect=require("./config/database");
-const todoRoute=require('./routes/toDo')
+const todoRoute=require('./routes/toDos')
 
 require('dotenv').config();
 
