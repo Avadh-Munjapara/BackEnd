@@ -1,8 +1,10 @@
 const express=require('express');
 const router=express.Router();
 const {getTodo,getTodoById}=require('../controllers/getTodo');
-const createTodo=require('../controllers/createToDo')
+const createTodo=require('../controllers/createToDo');
+const {updateTodo}=require('../controllers/updateTodo');
 router.post('/createTodo',createTodo);
 router.get('/getTodo',getTodo);
 router.get('/getTodo/:id',getTodoById);
+router.put('/updateTodo/:id',updateTodo);
 module.exports=router;
