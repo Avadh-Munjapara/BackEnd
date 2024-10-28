@@ -13,3 +13,15 @@ exports.createCommentCon=async (req,res)=>{
         })
     }
 }
+
+exports.deleteCommentCon=async (req,res)=>{
+    try {
+        const postId=req.params.postId;
+        const deletedComment=await commentsModel.findOneAndDelete({postId:postId});
+        res.status(201).json({message:"Comment deleted successfully"})
+    } catch (error) {
+        res.status(500).json({
+            message:"internal server error"
+        })
+    }
+}
