@@ -1,4 +1,3 @@
-const { default: mongoose } = require('mongoose');
 const postsModel = require('../models/postsModel');
 const likesModel = require('../models/likesModel');
 exports.likeController=async (req,res)=>{
@@ -6,26 +5,24 @@ exports.likeController=async (req,res)=>{
     try{
         const find=await postsModel.find({_id:postId});
         if(find){
-            console.log(find);
             const filter={postId:postId};
-            try{
-                const findLike=await likesModel.findOne(filter);
-                if(findLike.liked===true){
-                    res.json({
-                        message:"post is already liked"
-                    })
-                }
-                const update={liked:true}
-                const updatedLike=await likesModel.updateOne(filter,update);
+            const findLike=await likesModel.findOne(filter);
+            console.log(findLike);
+            if(findLike){
+                res.json({
+                    message:"post is already liked"
+                })
             }
-           catch(error){
-            res.status(500).json({
-                message:"internal server error"
-            })
-           }
-            res.status(200).json({
-                message:"liked updated successfully!",
-            })
+            else{
+                const newLike=new likesModel({
+                    postId:postId,
+                    liked:true
+                })
+                await newLike.save();
+                res.status(200).json({
+                    message:"post liked successfully!",
+                })
+            }
         }
         else{
            res.status(404).json({
@@ -33,6 +30,10 @@ exports.likeController=async (req,res)=>{
            })
         }
     }catch(error){
+        res.status(500).json({
+            error:error.message,
+            message:"internal server error"
+        })
         console.log(error);
     }
 
@@ -45,24 +46,19 @@ exports.unLikeController=async (req,res)=>{
         if(find){
             console.log(find);
             const filter={postId:postId};
-            try{
-                const findLike=await likesModel.findOne(filter);
-                if(findLike.liked===false){
-                    res.json({
-                        message:"post is already unliked"
-                    })
-                }
-                const update={liked:false}
-                const updatedLike=await likesModel.updateOne(filter,update);
+            const findLike=await likesModel.findOne(filter);
+            if(findLike){
+
+                const delLike=await likesModel.findOneAndDelete(filter);
+                res.json({
+                    message:"post is unliked successfully"
+                })
+            }else{
+                res.json({
+                    message:"post is alreay unliked",
+                })
             }
-           catch(error){
-            res.status(500).json({
-                message:"internal server error"
-            })
-           }
-            res.status(200).json({
-                message:"liked updated successfully!",
-            })
+           
         }
         else{
            res.status(404).json({
@@ -70,6 +66,10 @@ exports.unLikeController=async (req,res)=>{
            })
         }
     }catch(error){
+        res.status(500).json({
+            error:error.message,
+            message:"internal server error"
+        })
         console.log(error);
     }
 
