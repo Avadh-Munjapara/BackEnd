@@ -6,6 +6,6 @@ const { createCommentCon, deleteCommentCon } = require("../controller/commentCon
 router.post('/createPost',createPost);
 router.post('/likes/like',likeController);
 router.delete('/likes/unLike',unLikeController);
-router.post('/posts/:postId/createComment',createCommentCon);
-router.delete('/posts/:postId/deleteComment/:commentId',deleteCommentCon);
+router.post('/comments/createComment',createCommentCon);
+router.delete('/comments/deleteComment',deleteCommentCon);
 module.exports=router;

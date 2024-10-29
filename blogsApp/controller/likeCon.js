@@ -55,6 +55,7 @@ exports.unLikeController=async (req,res)=>{
                 
                 res.status(200).json({
                     message:"post unliked successfully!",
+                    data:updatedPost
                 })
 
             }
