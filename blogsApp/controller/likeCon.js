@@ -40,7 +40,7 @@ exports.likeController=async (req,res)=>{
 }
 
 exports.unLikeController=async (req,res)=>{
-    const postId=req.params.postId;
+    const {postId,likeId}=req.params;
     try{
         const find=await postsModel.findById(postId);
         if(find){
@@ -49,7 +49,7 @@ exports.unLikeController=async (req,res)=>{
             const findLike=await likesModel.findOne(filter);
             if(findLike){
 
-                const delLike=await likesModel.findOneAndDelete(filter);
+                const delLike=await likesModel.findByIdAndDelete(likeId);
                 res.json({
                     message:"post is unliked successfully"
                 })
