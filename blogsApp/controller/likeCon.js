@@ -10,7 +10,8 @@ exports.likeController=async (req,res)=>{
             console.log(findLike);
             if(findLike){
                 res.json({
-                    message:"post is already liked"
+                    message:"post is already liked",
+                    data:findLike
                 })
             }
             else{
@@ -21,6 +22,7 @@ exports.likeController=async (req,res)=>{
                 await newLike.save();
                 res.status(200).json({
                     message:"post liked successfully!",
+                    data:findLike
                 })
             }
         }
@@ -45,16 +47,15 @@ exports.unLikeController=async (req,res)=>{
         const find=await postsModel.findById(postId);
         if(find){
             console.log(find);
-            const filter={postId:postId};
-            const findLike=await likesModel.findOne(filter);
+            const findLike=await likesModel.findById(likeId);
             if(findLike){
-
                 const delLike=await likesModel.findByIdAndDelete(likeId);
-                res.json({
-                    message:"post is unliked successfully"
+                res.status(200).json({
+                    message:"post is unliked successfully",
+                    data:delLike
                 })
             }else{
-                res.json({
+                res.status(200).json({
                     message:"post is alreay unliked",
                 })
             }

@@ -4,14 +4,14 @@ exports.createCommentCon=async (req,res)=>{
 
     const {postId}=req.params;
     try{
-        const findPost=await postsModel.findOne({_id:postId});
+        const findPost=await postsModel.findById(postId);
         if(findPost){
             const newComment=new commentsModel({
                 postId:postId,
                 comment:req.body.comment,
             })
             await newComment.save();
-            res.status(201).json({message:"Comment created successfully",data:newComment});
+            res.status(200).json({message:"Comment created successfully",data:newComment});
         }else{
             res.status(404).json({message:"Post not found"})
         }
@@ -21,23 +21,30 @@ exports.createCommentCon=async (req,res)=>{
             message:"internal server error"
         })
     }
-}
+}   
 
 exports.deleteCommentCon=async (req,res)=>{
     const {postId,commentId}=req.params;
     try{
-        const findPost=await postsModel.findOne({_id:postId});
+        const findPost=await postsModel.findById(postId);
         if(findPost){
-            try{
-                const delComment=commentsModel.findOneAndDelete({_id:commentId});
-                res.status(201).json({message:"Comment deleted successfully",data:delComment});
-            }
-            catch(error){
-                res.status(500).json({
-                    error:error.message
+            const findComment=await commentsModel.findById(commentId);
+            console.log(findComment);
+            if(findComment){
+                try{
+                    const delComment=await commentsModel.findByIdAndDelete(commentId);
+                    res.status(200).json({message:"Comment deleted successfully",data:delComment});
+                }
+                catch(error){
+                    res.status(500).json({
+                        error:error.message
+                    })
+                }
+            }else{
+                res.status(404).json({
+                    message:"no comment found"
                 })
             }
-            
         }else{
             res.status(404).json({message:"Post not found"})
         }
