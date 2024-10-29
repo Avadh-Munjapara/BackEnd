@@ -3,7 +3,7 @@ const likesModel = require('../models/likesModel');
 exports.likeController=async (req,res)=>{
     const postId=req.params.postId;
     try{
-        const find=await postsModel.find({_id:postId});
+        const find=await postsModel.findById(postId);
         if(find){
             const filter={postId:postId};
             const findLike=await likesModel.findOne(filter);
@@ -42,7 +42,7 @@ exports.likeController=async (req,res)=>{
 exports.unLikeController=async (req,res)=>{
     const postId=req.params.postId;
     try{
-        const find=await postsModel.find({_id:postId});
+        const find=await postsModel.findById(postId);
         if(find){
             console.log(find);
             const filter={postId:postId};
