@@ -1,14 +1,14 @@
 const mongoose=require('mongoose');
 const likeSchema=new mongoose.Schema({
-    postId:{
-        type:String,
+    post:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"post",
         required:true
     },
-    liked:{
-        type:Boolean,
-        default:false
+    user:{
+        type:String,
+        required:true
     }
-   
 })
 
 module.exports=mongoose.model('like',likeSchema);

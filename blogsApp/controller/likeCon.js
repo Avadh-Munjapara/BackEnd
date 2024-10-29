@@ -1,13 +1,12 @@
 const postsModel = require('../models/postsModel');
 const likesModel = require('../models/likesModel');
 exports.likeController=async (req,res)=>{
-    const postId=req.params.postId;
+    const {post,user}=req.body;
     try{
-        const find=await postsModel.findById(postId);
+        const find=await postsModel.findById(post);
         if(find){
-            const filter={postId:postId};
+            const filter={user:user};
             const findLike=await likesModel.findOne(filter);
-            console.log(findLike);
             if(findLike){
                 res.json({
                     message:"post is already liked",
@@ -16,13 +15,16 @@ exports.likeController=async (req,res)=>{
             }
             else{
                 const newLike=new likesModel({
-                    postId:postId,
-                    liked:true
+                    post:post,
+                    user:user
                 })
                 await newLike.save();
+
+                const updatedPost=await postsModel.findByIdAndUpdate(newLike.post,{$push:{likes:newLike._id}},{new:true});
+                
                 res.status(200).json({
                     message:"post liked successfully!",
-                    data:findLike
+                    data:newLike
                 })
             }
         }
@@ -42,24 +44,25 @@ exports.likeController=async (req,res)=>{
 }
 
 exports.unLikeController=async (req,res)=>{
-    const {postId,likeId}=req.params;
+    const {post,like}=req.body;
     try{
-        const find=await postsModel.findById(postId);
+        const find=await postsModel.findById(post);
         if(find){
-            console.log(find);
-            const findLike=await likesModel.findById(likeId);
+            const findLike=await likesModel.findById(like);
             if(findLike){
-                const delLike=await likesModel.findByIdAndDelete(likeId);
+                const delLike=await likesModel.findByIdAndDelete(like);
+                const updatedPost=await postsModel.findByIdAndUpdate(delLike.post,{$pull:{likes:delLike._id}},{new:true});
+                
                 res.status(200).json({
-                    message:"post is unliked successfully",
-                    data:delLike
+                    message:"post unliked successfully!",
                 })
-            }else{
-                res.status(200).json({
-                    message:"post is alreay unliked",
+
+            }
+            else{
+                res.json({
+                    message:"post is already unliked",
                 })
             }
-           
         }
         else{
            res.status(404).json({
@@ -73,6 +76,5 @@ exports.unLikeController=async (req,res)=>{
         })
         console.log(error);
     }
-
 
 }

@@ -11,6 +11,14 @@ const postSchema=new schema({
         type:String,
         required:true,
         maxLength:150
+    },
+    likes:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"like"
+    },
+    comments:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'comment'
     }
 })
 
