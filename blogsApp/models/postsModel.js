@@ -12,14 +12,14 @@ const postSchema=new schema({
         required:true,
         maxLength:150
     },
-    likes:{
+    likes:[{
         type: mongoose.Schema.Types.ObjectId,
         ref:"like"
-    },
-    comments:{
+    }],
+    comments:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'comment'
-    }
+    }]
 })
 
 module.exports=mongoose.model('post',postSchema);
