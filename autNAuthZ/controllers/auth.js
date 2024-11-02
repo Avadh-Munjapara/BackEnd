@@ -58,7 +58,7 @@ exports.loginController=async (req,res)=>{
         if(await bcrypt.compare(password,existedUser.password)){
     
             const payload={
-                email,id:existedUser._id,role:"student"
+                email,id:existedUser._id,role:"admin"
             }
             const token=jwt.sign(payload,process.env.JWT_TOKEN);
             return res.status(200).json({
