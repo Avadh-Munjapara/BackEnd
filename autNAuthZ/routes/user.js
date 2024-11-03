@@ -1,7 +1,7 @@
 const { signUpController,loginController } = require('../controllers/Auth');
 const express=require('express');
 const router=express.Router();
-const {authe,isStudent,isAdmin}=require('../middlewares/auth');
+const {authe,isStudent,isAdmin}=require('../middlewares/authMiddle');
 router.post('/signUp',signUpController);
 router.get('/login',loginController);
 router.get('/student',authe,isStudent,(req,res,next)=>{

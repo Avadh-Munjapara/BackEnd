@@ -3,7 +3,7 @@ const jwt=require('jsonwebtoken');
 const user=require('../models/userModel')
 require('dotenv').config();
 exports.signUpController=async (req,res)=>{
-    const {name,email,password}=req.body;
+    const {name,email,password,role }=req.body;
     try{
         const existedUser=await user.findOne({email});
         if(existedUser){
@@ -22,7 +22,7 @@ exports.signUpController=async (req,res)=>{
             })
         }
 
-        const newUser=await user.create({name,email,password:hashPassword})
+        const newUser=await user.create({name,email,password:hashPassword,role})
         return res.status(201).json({
             success:true,
             message:"user created successfully",
@@ -32,7 +32,7 @@ exports.signUpController=async (req,res)=>{
     }catch(error){
         return res.status(500).json({
             message:"error while communicating with databases",
-            success:fasle
+            success:false
         })
     }
 }
@@ -54,14 +54,14 @@ exports.loginController=async (req,res)=>{
                 message:"not registerd user"
             })
         }
-    
+        
         if(await bcrypt.compare(password,existedUser.password)){
     
             const payload={
-                email,id:existedUser._id,role:"admin"
+                email,id:existedUser._id,role:existedUser.role
             }
             const token=jwt.sign(payload,process.env.JWT_TOKEN);
-            return res.status(200).json({
+            return res.cookie('token',token,{expire : 24 * 60 * 60 * 1000 }).status(200).json({
                 success:true,
                 message:"login successful",
                 token
