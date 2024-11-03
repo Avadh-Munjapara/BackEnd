@@ -3,7 +3,7 @@ const jwt=require('jsonwebtoken');
 const user=require('../models/userModel')
 require('dotenv').config();
 exports.signUpController=async (req,res)=>{
-    const {name,email,password,role }=req.body;
+    const {name,email,password,role}=req.body;
     try{
         const existedUser=await user.findOne({email});
         if(existedUser){
@@ -26,7 +26,7 @@ exports.signUpController=async (req,res)=>{
         return res.status(201).json({
             success:true,
             message:"user created successfully",
-            user:user
+            user:{name,email,role}
         })
 
     }catch(error){
@@ -66,6 +66,12 @@ exports.loginController=async (req,res)=>{
                 message:"login successful",
                 token
             })
+
+            // return res.status(200).json({
+            //     success:true,
+            //     message:"login successful",
+            //     token
+            // })
         }
     }catch(error){
         return res.status(500).json({
