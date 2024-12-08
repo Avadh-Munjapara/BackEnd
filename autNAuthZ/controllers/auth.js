@@ -61,7 +61,7 @@ exports.loginController=async (req,res)=>{
                 email,id:existedUser._id,role:existedUser.role
             }
             const token=jwt.sign(payload,process.env.JWT_TOKEN);
-            return res.cookie('token',token,{expire : 24 * 60 * 60 * 1000 }).status(200).json({
+            return res.cookie('token',token,{maxAge : 3000 }).status(200).json({
                 success:true,
                 message:"login successful",
                 token
@@ -73,7 +73,7 @@ exports.loginController=async (req,res)=>{
             //     token
             // })
         }
-    }catch(error){
+    }catch(TypeError){
         return res.status(500).json({
             success:false,
             message:'error while login'

@@ -12,7 +12,7 @@ exports.authe=async (req,res,next)=>{
      }else{
       return res.status(400).json({
          success:false,
-         message:'token not found'
+         message:'you are not authorized to loginn'
       })
      }
       
@@ -22,7 +22,7 @@ exports.authe=async (req,res,next)=>{
 
 exports.isStudent=async(req,res,next)=>{
    const token=req.body.token||req.cookies.token||req.header('Authorization').replace('Bearer ',"");
-    const decode=jwt.decode(token);
+   const decode=jwt.decode(token);
    if(decode.role!='student') {
       return res.status(401).json({
          success:false,
