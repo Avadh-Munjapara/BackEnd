@@ -89,3 +89,34 @@ exports.imageReduceUpload=async (req,res)=>{
         console.log(error);
     }
 }
+
+exports.videoUpload=async (req,res)=>{
+    try{
+        const{name,email,tags}=req.body;
+        const file=req.files.videoFile;
+        const supported=['mov','mp4'];
+        const fileType=file.name.split('.')[1].toLowerCase();
+        if(!validateFile(fileType,supported)){
+            return res.status(400).json({
+                message:'file type is not supported',
+                success:false
+            })
+        }
+        const options={
+            folder:"kinetic",
+            resource_type :'auto'
+        }
+        let response=await cloudinaryFileUploader(file.tempFilePath,options);
+        console.log(response);
+        fileModel.create({
+            name,email,tags,fileUrl:response.secure_url
+        }
+        )
+        return res.status(200).json({
+            success:true,
+            message:"file created successfully"
+        })
+    }catch(error){
+        console.log(error);
+    }
+}
