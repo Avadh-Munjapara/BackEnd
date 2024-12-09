@@ -43,7 +43,9 @@ exports.imageUpload=async (req,res)=>{
             })
         }
         const options={
-            folder:"kinetic"
+            folder:"kinetic",
+            height:120,
+            width:120   
         }
         let response=await cloudinaryFileUploader(file.tempFilePath,options);
         console.log(response);
@@ -104,7 +106,7 @@ exports.videoUpload=async (req,res)=>{
         }
         const options={
             folder:"kinetic",
-            resource_type :'auto'
+            resource_type :'auto',
         }
         let response=await cloudinaryFileUploader(file.tempFilePath,options);
         console.log(response);
