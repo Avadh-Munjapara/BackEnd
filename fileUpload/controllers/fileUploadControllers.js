@@ -65,6 +65,7 @@ exports.imageUpload=async (req,res)=>{
 exports.imageReduceUpload=async (req,res)=>{
     try{
         const{name,email,tags}=req.body;
+        console.log(req.files.imageFile);
         const file=req.files.imageFile;
         const supported=['jpg','jpeg','png'];
         const fileType=file.name.split('.')[1];
